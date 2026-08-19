@@ -21,21 +21,21 @@ export const DashboardSidebar = () => {
             <DashboardSidebarNavLink
               icon={<ClipboardList />}
               title="Tickets"
-              to="/dashboard"
+              to="/dashboard/tickets"
             />
           </li>
           <li className="flex justify-center">
             <DashboardSidebarNavLink
               icon={<Users />}
               title="Technicians"
-              to="/welcome"
+              to="/"
             />
           </li>
           <li className="flex justify-center">
             <DashboardSidebarNavLink
               icon={<BriefcaseBusiness />}
               title="Customers"
-              to="/welcome"
+              to="/"
             />
           </li>
         </ul>
