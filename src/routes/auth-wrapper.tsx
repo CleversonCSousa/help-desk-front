@@ -22,7 +22,8 @@ const AuthWrapper = () => {
     }
   }, [isSuccess, data, dispatch]);
 
-  if (isLoading || isFetching) {
+  // This rule (isSuccess && user === null) prevents rendering until the user is loaded.
+  if (isLoading || isFetching || (isSuccess && user === null)) {
     return null;
   }
 
