@@ -8,6 +8,8 @@ import RedirectIfAuthenticated from "./routes/redirect-if-authenticated.tsx";
 import { NotFound } from "./pages/not-found.tsx";
 import { SignIn } from "./features/auth/sign-in.tsx";
 import { Home } from "./pages/home.tsx";
+import RoleBasedDashboard from "./routes/role-based-dashboard.tsx";
+import RoleBasedTickets from "./routes/role-based-tickets.tsx";
 
 function App() {
   return (
@@ -21,6 +23,9 @@ function App() {
           </Route>
           <Route element={<RequireAuth />}>
             <Route path="/welcome" element={<Welcome />} />
+            <Route path="/dashboard" element={<RoleBasedDashboard />}>
+              <Route path="tickets" element={<RoleBasedTickets />} />
+            </Route>
           </Route>
         </Route>
         <Route path="*" element={<NotFound />} />
