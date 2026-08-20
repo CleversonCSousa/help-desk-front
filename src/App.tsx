@@ -10,6 +10,7 @@ import { SignIn } from "./features/auth/sign-in.tsx";
 import { Home } from "./pages/home.tsx";
 import RoleBasedDashboard from "./routes/role-based-dashboard.tsx";
 import RoleBasedTickets from "./routes/role-based-tickets.tsx";
+import RoleBasedServices from "./routes/role-based-services.tsx";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
             <Route path="/welcome" element={<Welcome />} />
             <Route path="/dashboard" element={<RoleBasedDashboard />}>
               <Route path="tickets" element={<RoleBasedTickets />} />
+              <Route path="services" element={<RoleBasedServices />} />
             </Route>
           </Route>
         </Route>
