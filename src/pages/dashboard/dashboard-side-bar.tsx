@@ -1,4 +1,10 @@
-import { BriefcaseBusiness, ClipboardList, Menu, Users } from "lucide-react";
+import {
+  BriefcaseBusiness,
+  ClipboardList,
+  Menu,
+  Users,
+  Wrench,
+} from "lucide-react";
 import { DashboardSidebarNavLink } from "./dashboard-side-bar-nav-link";
 
 export const DashboardSidebar = () => {
@@ -36,6 +42,13 @@ export const DashboardSidebar = () => {
               icon={<BriefcaseBusiness />}
               title="Customers"
               to="/"
+            />
+          </li>
+          <li className="flex justify-center">
+            <DashboardSidebarNavLink
+              icon={<Wrench />}
+              title="Services"
+              to="/dashboard/services"
             />
           </li>
         </ul>
