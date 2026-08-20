@@ -51,7 +51,7 @@ export const serviceApiSlice = apiSlice.injectEndpoints({
               "listServices",
               undefined,
               (draft) => {
-                draft.push({
+                draft.unshift({
                   id: data.service.id,
                   title: data.service.title,
                   price: data.service.price,
