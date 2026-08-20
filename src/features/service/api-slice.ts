@@ -23,6 +23,10 @@ type Service = {
   isActive: boolean;
 };
 
+type ToggleIsActiveResponse = {
+  message: string;
+};
+
 export const serviceApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     createService: builder.mutation<
@@ -67,8 +71,41 @@ export const serviceApiSlice = apiSlice.injectEndpoints({
         method: "GET",
       }),
     }),
+    toggleIsActive: builder.mutation<ToggleIsActiveResponse, { id: string }>({
+      query: ({ id }) => ({
+        url: `/services/${id}/active`,
+        method: "PATCH",
+      }),
+
+      async onQueryStarted({ id }, { dispatch, queryFulfilled }) {
+        let patchResult;
+
+        try {
+          await queryFulfilled;
+          patchResult = dispatch(
+            serviceApiSlice.util.updateQueryData(
+              "listServices",
+              undefined,
+              (draft) => {
+                // searches for a service with the same ID passed as a parameter
+                const service = draft.find((s) => s.id === id);
+                if (service) {
+                  // toggle isActive
+                  service.isActive = !service.isActive;
+                }
+              },
+            ),
+          );
+        } catch {
+          patchResult?.undo();
+        }
+      },
+    }),
   }),
 });
 
-export const { useCreateServiceMutation, useListServicesQuery } =
-  serviceApiSlice;
+export const {
+  useCreateServiceMutation,
+  useListServicesQuery,
+  useToggleIsActiveMutation,
+} = serviceApiSlice;
