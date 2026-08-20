@@ -13,6 +13,7 @@ type FormGroupProps = {
   error?: FieldError;
   helperText?: string | string[];
   checklist?: ChecklistItem[];
+  step?: string | number;
 };
 
 export const FormGroup = ({
@@ -23,6 +24,7 @@ export const FormGroup = ({
   error,
   helperText,
   checklist,
+  step,
 }: FormGroupProps) => {
   return (
     <div className="form-group flex flex-col gap-1">
@@ -34,6 +36,7 @@ export const FormGroup = ({
         id={registration.name}
         className="h-10 border-0 border-b border-gray-500 placeholder-gray-400 outline-none"
         type={type}
+        step={step}
         placeholder={placeholder}
       />
 
