@@ -14,6 +14,13 @@ type CustomerResponse = {
   accessToken: string;
 };
 
+type ListCustomersResponse = Array<{
+  id: string;
+  name: string;
+  email: string;
+  avatarUrl: string;
+}>;
+
 export const customerApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     registerCustomer: builder.mutation<CustomerResponse, CustomerRequest>({
@@ -23,7 +30,14 @@ export const customerApiSlice = apiSlice.injectEndpoints({
         body: user,
       }),
     }),
+    listCustomers: builder.query<ListCustomersResponse, void>({
+      query: () => ({
+        url: "/customers",
+        method: "GET",
+      }),
+    }),
   }),
 });
 
-export const { useRegisterCustomerMutation } = customerApiSlice;
+export const { useRegisterCustomerMutation, useListCustomersQuery } =
+  customerApiSlice;
