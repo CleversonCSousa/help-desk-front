@@ -27,6 +27,17 @@ type ToggleIsActiveResponse = {
   message: string;
 };
 
+type UpdateServiceRequest = {
+  id: string;
+  title: string;
+  description?: string;
+  price: number;
+};
+
+type UpdateServiceResponse = {
+  message: string;
+};
+
 export const serviceApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     createService: builder.mutation<
@@ -101,6 +112,43 @@ export const serviceApiSlice = apiSlice.injectEndpoints({
         }
       },
     }),
+    updateService: builder.mutation<
+      UpdateServiceResponse,
+      UpdateServiceRequest
+    >({
+      query: ({ id, ...body }) => ({
+        url: `/services/${id}`,
+        method: "PUT",
+        body,
+      }),
+      async onQueryStarted({ id, ...put }, { dispatch, queryFulfilled }) {
+        let putResult;
+
+        try {
+          await queryFulfilled;
+          putResult = dispatch(
+            serviceApiSlice.util.updateQueryData(
+              "listServices",
+              undefined,
+              (draft) => {
+                const service = draft.find((s) => s.id === id);
+                if (service) {
+                  service.title = put.title;
+                  // protects the flow, only updates the description if it was provided
+                  if (put.description !== undefined) {
+                    service.description = put.description;
+                  }
+
+                  service.price = put.price;
+                }
+              },
+            ),
+          );
+        } catch {
+          putResult?.undo();
+        }
+      },
+    }),
   }),
 });
 
@@ -108,4 +156,5 @@ export const {
   useCreateServiceMutation,
   useListServicesQuery,
   useToggleIsActiveMutation,
+  useUpdateServiceMutation,
 } = serviceApiSlice;
