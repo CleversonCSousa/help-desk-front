@@ -41,7 +41,7 @@ export const DashboardSidebar = () => {
             <DashboardSidebarNavLink
               icon={<BriefcaseBusiness />}
               title="Customers"
-              to="/"
+              to="/dashboard/customers"
             />
           </li>
           <li className="flex justify-center">
