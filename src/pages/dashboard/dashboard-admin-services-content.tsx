@@ -1,7 +1,7 @@
-import { Ban, PenLineIcon } from "lucide-react";
 import { CreateServiceModal } from "./create-service-modal";
 import { useListServicesQuery } from "../../features/service/api-slice";
 import { ToggleIsActive } from "./toggle-is-active";
+import { UpdateServiceModal } from "./update-service-modal";
 
 export const DashboardAdminServicesContent = () => {
   const { data: services, isLoading } = useListServicesQuery();
@@ -36,7 +36,10 @@ export const DashboardAdminServicesContent = () => {
           <tbody className="divide-y divide-gray-500">
             {services && services.length > 0 ? (
               services.map((service) => (
-                <tr className="transition-colors hover:bg-gray-50">
+                <tr
+                  key={service.id}
+                  className="transition-colors hover:bg-gray-50"
+                >
                   <td className="px-1.5 py-1 align-middle font-bold text-gray-900 min-[381px]:px-3 min-[381px]:py-2 md:px-6 md:py-4">
                     <span className="min-[381px]:hidden">Instalaç...</span>
                     <span className="hidden min-[381px]:inline">
@@ -59,9 +62,7 @@ export const DashboardAdminServicesContent = () => {
                         id={service.id}
                         value={service.isActive ? true : false}
                       />
-                      <button className="flex h-8 w-8 items-center justify-center rounded-md bg-gray-500 transition-colors">
-                        <PenLineIcon size={16} />
-                      </button>
+                      <UpdateServiceModal service={service} />
                     </div>
                   </td>
                 </tr>
