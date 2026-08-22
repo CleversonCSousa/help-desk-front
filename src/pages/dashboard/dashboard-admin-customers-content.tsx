@@ -32,7 +32,6 @@ export const DashboardAdminCustomersContent = () => {
     <main className="flex-1 overflow-y-auto rounded-tl-3xl bg-white p-4 text-gray-200 min-[381px]:p-6 md:mt-3 md:p-12 md:pt-13 md:pr-12 md:pb-12">
       <div className="flex items-center justify-between">
         <h1 className="text-brand-blue-dark text-3xl font-bold">Customers</h1>
-        <CreateServiceModal />
       </div>
       <div className="mt-6 overflow-hidden rounded-lg border border-gray-500 text-sm md:text-base">
         <table className="w-full table-fixed">
