@@ -21,6 +21,10 @@ type ListCustomersResponse = Array<{
   avatarUrl: string;
 }>;
 
+type DeleteCustomerResponse = {
+  message: string;
+};
+
 export const customerApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     registerCustomer: builder.mutation<CustomerResponse, CustomerRequest>({
@@ -36,8 +40,33 @@ export const customerApiSlice = apiSlice.injectEndpoints({
         method: "GET",
       }),
     }),
+    deleteCustomer: builder.mutation<DeleteCustomerResponse, { id: string }>({
+      query: ({ id }) => ({
+        url: "/customers/" + id,
+        method: "DELETE",
+      }),
+      async onQueryStarted({ id }, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          dispatch(
+            customerApiSlice.util.updateQueryData(
+              "listCustomers",
+              undefined,
+              (draft) => {
+                return draft.filter((customer) => customer.id !== id);
+              },
+            ),
+          );
+        } catch {
+          //
+        }
+      },
+    }),
   }),
 });
 
-export const { useRegisterCustomerMutation, useListCustomersQuery } =
-  customerApiSlice;
+export const {
+  useRegisterCustomerMutation,
+  useListCustomersQuery,
+  useDeleteCustomerMutation,
+} = customerApiSlice;
