@@ -2,6 +2,7 @@ import { PenLineIcon } from "lucide-react";
 import { useListCustomersQuery } from "../../features/customer/customer-api-slice";
 import { CreateServiceModal } from "./create-service-modal";
 import { DeleteCustomerModal } from "./delete-customer-modal";
+import { UpdateCustomerModal } from "./update-customer-modal";
 
 export const DashboardAdminCustomersContent = () => {
   const { data: customers, isLoading } = useListCustomersQuery();
@@ -75,9 +76,7 @@ export const DashboardAdminCustomersContent = () => {
                   </td>
                   <td className="w-[88px] px-2 py-1 align-middle md:px-3 md:py-4">
                     <div className="flex shrink-0 items-center justify-end gap-1.5">
-                      <button className="flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-md bg-gray-500">
-                        <PenLineIcon size={16} />
-                      </button>
+                      <UpdateCustomerModal customer={customer} />
                       <DeleteCustomerModal customer={customer} />
                     </div>
                   </td>
