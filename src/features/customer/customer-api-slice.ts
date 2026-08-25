@@ -25,6 +25,15 @@ type DeleteCustomerResponse = {
   message: string;
 };
 
+type UpdateCustomerResponse = {
+  message: string;
+};
+type UpdateCustomerRequest = {
+  id: string;
+  name: string;
+  email: string;
+};
+
 export const customerApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     registerCustomer: builder.mutation<CustomerResponse, CustomerRequest>({
@@ -62,6 +71,37 @@ export const customerApiSlice = apiSlice.injectEndpoints({
         }
       },
     }),
+    updateCustomer: builder.mutation<
+      UpdateCustomerResponse,
+      UpdateCustomerRequest
+    >({
+      query: ({ id, ...body }) => ({
+        url: `/customers/${id}`,
+        method: "PUT",
+        body,
+      }),
+      async onQueryStarted({ id, ...put }, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          dispatch(
+            customerApiSlice.util.updateQueryData(
+              "listCustomers",
+              undefined,
+              (draft) => {
+                const customer = draft.find((c) => c.id === id);
+
+                if (customer) {
+                  customer.name = put.name;
+                  customer.email = put.email;
+                }
+              },
+            ),
+          );
+        } catch (error) {
+          console.error("Failed to update customer cache", error);
+        }
+      },
+    }),
   }),
 });
 
@@ -69,4 +109,5 @@ export const {
   useRegisterCustomerMutation,
   useListCustomersQuery,
   useDeleteCustomerMutation,
+  useUpdateCustomerMutation,
 } = customerApiSlice;
