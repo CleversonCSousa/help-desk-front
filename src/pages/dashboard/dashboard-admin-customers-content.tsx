@@ -1,6 +1,4 @@
-import { PenLineIcon } from "lucide-react";
 import { useListCustomersQuery } from "../../features/customer/customer-api-slice";
-import { CreateServiceModal } from "./create-service-modal";
 import { DeleteCustomerModal } from "./delete-customer-modal";
 import { UpdateCustomerModal } from "./update-customer-modal";
 
