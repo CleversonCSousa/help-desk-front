@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../features/auth/auth-slice";
 import { NotFound } from "../pages/not-found";
-import { DashboardAdminTechniciansContent } from "../pages/dashboard/dashboard-admin-technicians-content";
+import { Outlet } from "react-router";
 
 const RoleBasedTechnicians = () => {
   console.log("hello");
@@ -11,7 +11,7 @@ const RoleBasedTechnicians = () => {
     return <NotFound />;
   }
 
-  return <DashboardAdminTechniciansContent />;
+  return <Outlet />;
 };
 
 export default RoleBasedTechnicians;

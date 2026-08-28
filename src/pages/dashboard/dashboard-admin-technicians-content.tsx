@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useListTechniciansQuery } from "../../features/technician/api-slice";
-import { UpdateCustomerModal } from "./update-customer-modal";
 import { WorkingHoursModal } from "./working-hours-modal";
 import { PenLineIcon } from "lucide-react";
+import { Link } from "react-router";
 
 export const DashboardAdminTechniciansContent = () => {
   const [visibleLimit, setVisibleLimit] = useState(4);
@@ -125,9 +125,14 @@ export const DashboardAdminTechniciansContent = () => {
                   </td>
                   <td className="w-[56px] px-1.5 py-1 min-[381px]:px-3 min-[381px]:py-2 md:w-[88px] md:px-6 md:py-4">
                     <div className="flex items-center justify-end">
-                      <button className="flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-md bg-gray-500">
-                        <PenLineIcon size={16} />
-                      </button>
+                      <Link
+                        to={`/dashboard/technicians/${technician.id}/edit`}
+                        state={{ technician }}
+                      >
+                        <button className="flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-md bg-gray-500">
+                          <PenLineIcon size={16} />
+                        </button>
+                      </Link>
                     </div>
                   </td>
                 </tr>
