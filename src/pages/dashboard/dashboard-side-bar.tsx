@@ -34,7 +34,7 @@ export const DashboardSidebar = () => {
             <DashboardSidebarNavLink
               icon={<Users />}
               title="Technicians"
-              to="/"
+              to="/dashboard/technicians"
             />
           </li>
           <li className="flex justify-center">

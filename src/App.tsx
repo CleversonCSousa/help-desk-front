@@ -13,6 +13,7 @@ import RoleBasedTickets from "./routes/role-based-tickets.tsx";
 import RoleBasedServices from "./routes/role-based-services.tsx";
 import RoleBasedCustomers from "./routes/role-based-customer.tsx";
 import { NotFoundDashboard } from "./pages/not-found-dashboard.tsx";
+import RoleBasedTechnicians from "./routes/role-based-technician.tsx";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
               <Route path="tickets" element={<RoleBasedTickets />} />
               <Route path="services" element={<RoleBasedServices />} />
               <Route path="customers" element={<RoleBasedCustomers />} />
+              <Route path="technicians" element={<RoleBasedTechnicians />} />
               <Route path="*" element={<NotFoundDashboard />} />
             </Route>
           </Route>
