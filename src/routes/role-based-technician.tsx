@@ -4,7 +4,6 @@ import { NotFound } from "../pages/not-found";
 import { Outlet } from "react-router";
 
 const RoleBasedTechnicians = () => {
-  console.log("hello");
   const user = useSelector(selectCurrentUser);
 
   if (!user || user.role !== "ADMIN") {

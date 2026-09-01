@@ -16,6 +16,7 @@ import { NotFoundDashboard } from "./pages/not-found-dashboard.tsx";
 import RoleBasedTechnicians from "./routes/role-based-technician.tsx";
 import { DashboardAdminTechniciansContent } from "./pages/dashboard/dashboard-admin-technicians-content.tsx";
 import { EditTechnician } from "./pages/dashboard/edit-technician.tsx";
+import { CreateTechnician } from "./pages/dashboard/create-technician.tsx";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
               <Route path="technicians" element={<RoleBasedTechnicians />}>
                 <Route index element={<DashboardAdminTechniciansContent />} />
                 <Route path=":userId/edit" element={<EditTechnician />} />
+                <Route path="create" element={<CreateTechnician />} />
               </Route>
               <Route path="*" element={<NotFoundDashboard />} />
             </Route>

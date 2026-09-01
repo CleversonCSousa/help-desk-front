@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useListTechniciansQuery } from "../../features/technician/api-slice";
 import { WorkingHoursModal } from "./working-hours-modal";
-import { PenLineIcon } from "lucide-react";
+import { PenLineIcon, Plus } from "lucide-react";
 import { Link } from "react-router";
 
 export const DashboardAdminTechniciansContent = () => {
@@ -53,6 +53,12 @@ export const DashboardAdminTechniciansContent = () => {
     <main className="flex-1 overflow-y-auto rounded-tl-3xl bg-white p-4 text-gray-200 min-[381px]:p-6 md:mt-3 md:p-12 md:pt-13 md:pr-12 md:pb-12">
       <div className="flex items-center justify-between">
         <h1 className="text-brand-blue-dark text-3xl font-bold">Technicians</h1>
+        <Link to="/dashboard/technicians/create">
+          <button className="flex h-10 cursor-pointer items-center gap-2 rounded-lg bg-gray-200 px-4 text-sm font-medium text-white transition-colors hover:opacity-90">
+            <Plus size={18} />
+            <span className="font-bold text-gray-600">New</span>
+          </button>
+        </Link>
       </div>
       <div className="mt-6 overflow-hidden rounded-lg border border-gray-500 text-sm md:text-base">
         <table className="w-full table-fixed">
@@ -67,7 +73,7 @@ export const DashboardAdminTechniciansContent = () => {
               <th className="px-1.5 py-1 text-left font-medium min-[381px]:px-3 min-[381px]:py-2 md:px-6 md:py-4">
                 Avaliability
               </th>
-              <th className="w-[56px] px-1.5 py-1 text-left font-medium whitespace-nowrap min-[381px]:px-3 min-[381px]:py-2 md:w-[88px] md:px-6 md:py-4"></th>
+              <th className="w-14 px-1.5 py-1 text-left font-medium whitespace-nowrap min-[381px]:px-3 min-[381px]:py-2 md:w-22 md:px-6 md:py-4"></th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-500">
@@ -106,7 +112,7 @@ export const DashboardAdminTechniciansContent = () => {
                     </div>
                   </td>
                   <td className="min-w-0 px-1.5 py-1 align-middle min-[381px]:px-3 min-[381px]:py-2 md:px-6 md:py-4">
-                    <div className="flex [scrollbar-width:none] gap-1.5 [-ms-overflow-style:none] max-[330px]:flex-col max-[330px]:items-start max-md:flex-nowrap max-md:overflow-x-auto md:flex-wrap md:gap-2 [&::-webkit-scrollbar]:hidden">
+                    <div className="flex scrollbar-none gap-1.5 [-ms-overflow-style:none] max-[330px]:flex-col max-[330px]:items-start max-md:flex-nowrap max-md:overflow-x-auto md:flex-wrap md:gap-2 [&::-webkit-scrollbar]:hidden">
                       {visibleWorkingHours.map((wh) => (
                         <div
                           key={wh.id}
@@ -123,7 +129,7 @@ export const DashboardAdminTechniciansContent = () => {
                       )}
                     </div>
                   </td>
-                  <td className="w-[56px] px-1.5 py-1 min-[381px]:px-3 min-[381px]:py-2 md:w-[88px] md:px-6 md:py-4">
+                  <td className="w-14 px-1.5 py-1 min-[381px]:px-3 min-[381px]:py-2 md:w-22 md:px-6 md:py-4">
                     <div className="flex items-center justify-end">
                       <Link
                         to={`/dashboard/technicians/${technician.id}/edit`}

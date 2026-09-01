@@ -6,7 +6,7 @@ type WorkingHoursModalProps = {
     id: string;
     name: string;
     workingHours: Array<{
-      id: string;
+      id?: string;
       timeSlot: string;
     }>;
   };
