@@ -24,6 +24,24 @@ type UpdateTechnicianRequest = {
   workingHours: Array<WorkingHour>;
 };
 
+type CreateTechnicianRequest = {
+  name: string;
+  email: string;
+  password: string;
+  workingHours: Array<WorkingHour>;
+};
+
+type CreateTechnicianResponse = {
+  message: string;
+  technician: {
+    id: string;
+    name: string;
+    email: string;
+    workingHours: Array<WorkingHour>;
+    avatarUrl: string | null;
+  };
+};
+
 export const technicianApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     listTechnicians: builder.query<Array<Technician>, void>({
@@ -64,8 +82,39 @@ export const technicianApiSlice = apiSlice.injectEndpoints({
         }
       },
     }),
+    createTechnician: builder.mutation<
+      CreateTechnicianResponse,
+      CreateTechnicianRequest
+    >({
+      query: (technician) => ({
+        url: "/technicians",
+        method: "POST",
+        body: technician,
+      }),
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(
+            technicianApiSlice.util.updateQueryData(
+              "listTechnicians",
+              undefined,
+              (draft) => {
+                draft.unshift({
+                  ...data.technician,
+                });
+              },
+            ),
+          );
+        } catch (error) {
+          console.error("Failed to create technician", error);
+        }
+      },
+    }),
   }),
 });
 
-export const { useListTechniciansQuery, useUpdateTechnicianMutation } =
-  technicianApiSlice;
+export const {
+  useListTechniciansQuery,
+  useUpdateTechnicianMutation,
+  useCreateTechnicianMutation,
+} = technicianApiSlice;
