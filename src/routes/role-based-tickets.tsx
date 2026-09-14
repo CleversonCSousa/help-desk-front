@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../features/auth/auth-slice";
-import { DashboardAdminTicketsContent } from "../pages/dashboard/dashboard-admin-tickets-content";
+import { Outlet } from "react-router";
 
 const RoleBasedTickets = () => {
   const user = useSelector(selectCurrentUser);
@@ -11,7 +11,7 @@ const RoleBasedTickets = () => {
 
   switch (user.role) {
     case "ADMIN":
-      return <DashboardAdminTicketsContent />;
+      return <Outlet />;
   }
 
   return <h1>RoleBasedDashboard</h1>;

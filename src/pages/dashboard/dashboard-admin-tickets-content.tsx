@@ -10,6 +10,7 @@ import {
 } from "../../features/ticket/api-slice";
 import { useState, type ReactNode } from "react";
 import { Pagination } from "./pagination";
+import { Link } from "react-router";
 
 export const DashboardAdminTicketsContent = () => {
   const [currentPage, setCurrentPage] = useState(0);
@@ -183,9 +184,11 @@ export const DashboardAdminTicketsContent = () => {
                     </div>
                   </td>
                   <td className="px-1.5 py-1 align-middle whitespace-nowrap min-[381px]:px-3 min-[381px]:py-2 md:px-6 md:py-4">
-                    <button className="flex h-8 w-8 items-center justify-center rounded-md bg-gray-500 transition-colors">
-                      <PenLineIcon size={16} />
-                    </button>
+                    <Link to={`/dashboard/tickets/${ticket.id}`}>
+                      <button className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md bg-gray-500 transition-colors">
+                        <PenLineIcon size={16} />
+                      </button>
+                    </Link>
                   </td>
                 </tr>
               );

@@ -17,6 +17,8 @@ import RoleBasedTechnicians from "./routes/role-based-technician.tsx";
 import { DashboardAdminTechniciansContent } from "./pages/dashboard/dashboard-admin-technicians-content.tsx";
 import { EditTechnician } from "./pages/dashboard/edit-technician.tsx";
 import { CreateTechnician } from "./pages/dashboard/create-technician.tsx";
+import { TicketDetails } from "./pages/dashboard/ticket-details.tsx";
+import { DashboardAdminTicketsContent } from "./pages/dashboard/dashboard-admin-tickets-content.tsx";
 
 function App() {
   return (
@@ -32,7 +34,10 @@ function App() {
             <Route path="/welcome" element={<Welcome />} />
             <Route path="/dashboard" element={<RoleBasedDashboard />}>
               <Route index element={<NotFoundDashboard />} />
-              <Route path="tickets" element={<RoleBasedTickets />} />
+              <Route path="tickets" element={<RoleBasedTickets />}>
+                <Route index element={<DashboardAdminTicketsContent />} />
+                <Route path=":id" element={<TicketDetails />} />
+              </Route>
               <Route path="services" element={<RoleBasedServices />} />
               <Route path="customers" element={<RoleBasedCustomers />} />
               <Route path="technicians" element={<RoleBasedTechnicians />}>
