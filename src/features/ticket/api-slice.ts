@@ -24,6 +24,46 @@ type PaginatedResponse = {
   last: boolean;
 };
 
+export type CustomerDTO = {
+  id: string;
+  name: string;
+  avatarUrl: string | null;
+};
+
+export type ServiceDTO = {
+  id: string;
+  title: string;
+};
+
+export type TechnicianDTO = {
+  id: string;
+  name: string;
+  email: string;
+  avatarUrl: string | null;
+};
+
+export type AdditionalServiceDTO = {
+  id: string;
+  description: string;
+  price: number;
+};
+
+export type TicketDetail = {
+  id: string;
+  code: number;
+  title: string;
+  description: string;
+  basePrice: number;
+  totalPrice: number;
+  status: TicketStatus;
+  createdAt: string;
+  updatedAt: string;
+  customer: CustomerDTO;
+  service: ServiceDTO;
+  technician: TechnicianDTO;
+  additionalServices: Array<AdditionalServiceDTO>;
+};
+
 export const ticketApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     listTickets: builder.query<PaginatedResponse, number>({
@@ -32,7 +72,13 @@ export const ticketApiSlice = apiSlice.injectEndpoints({
         method: "GET",
       }),
     }),
+    getTicket: builder.query<TicketDetail, string>({
+      query: (id: string) => ({
+        url: `/tickets/${id}`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
-export const { useListTicketsQuery } = ticketApiSlice;
+export const { useListTicketsQuery, useGetTicketQuery } = ticketApiSlice;
