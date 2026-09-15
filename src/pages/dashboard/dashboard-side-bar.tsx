@@ -72,6 +72,7 @@ export const DashboardSidebar = () => {
                 icon={<ClipboardList />}
                 title="My tickets"
                 to="/dashboard/tickets"
+                end
               />
             </li>
             <li className="flex justify-center">
