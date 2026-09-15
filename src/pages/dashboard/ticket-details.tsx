@@ -6,7 +6,7 @@ import { formatCurrency } from "../../utils/format-currency";
 import { TICKET_STATUS_CONFIG } from "../../utils/status-config";
 import { Avatar } from "../../components/avatar";
 
-export const TicketDetails = () => {
+export const TicketDetailsAdmin = () => {
   const { id } = useParams();
 
   const {

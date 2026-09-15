@@ -9,16 +9,15 @@ import { NotFound } from "./pages/not-found.tsx";
 import { SignIn } from "./features/auth/sign-in.tsx";
 import { Home } from "./pages/home.tsx";
 import RoleBasedDashboard from "./routes/role-based-dashboard.tsx";
-import RoleBasedTickets from "./routes/role-based-tickets.tsx";
-import RoleBasedServices from "./routes/role-based-services.tsx";
-import RoleBasedCustomers from "./routes/role-based-customer.tsx";
 import { NotFoundDashboard } from "./pages/not-found-dashboard.tsx";
-import RoleBasedTechnicians from "./routes/role-based-technician.tsx";
 import { DashboardAdminTechniciansContent } from "./pages/dashboard/dashboard-admin-technicians-content.tsx";
 import { EditTechnician } from "./pages/dashboard/edit-technician.tsx";
 import { CreateTechnician } from "./pages/dashboard/create-technician.tsx";
-import { TicketDetails } from "./pages/dashboard/ticket-details.tsx";
-import { DashboardAdminTicketsContent } from "./pages/dashboard/dashboard-admin-tickets-content.tsx";
+import RequireRole from "./routes/require-role.tsx";
+import { TicketContentResolver } from "./routes/ticket-content-resolver.tsx";
+import { TicketDetailsContentResolver } from "./routes/ticket-details-resolver.tsx";
+import { DashboardAdminServicesContent } from "./pages/dashboard/dashboard-admin-services-content.tsx";
+import { DashboardAdminCustomersContent } from "./pages/dashboard/dashboard-admin-customers-content.tsx";
 
 function App() {
   return (
@@ -34,17 +33,42 @@ function App() {
             <Route path="/welcome" element={<Welcome />} />
             <Route path="/dashboard" element={<RoleBasedDashboard />}>
               <Route index element={<NotFoundDashboard />} />
-              <Route path="tickets" element={<RoleBasedTickets />}>
-                <Route index element={<DashboardAdminTicketsContent />} />
-                <Route path=":id" element={<TicketDetails />} />
+              <Route
+                path="tickets"
+                element={
+                  <RequireRole
+                    allowedRoles={["ADMIN", "TECHNICIAN", "CUSTOMER"]}
+                  />
+                }
+              >
+                <Route index element={<TicketContentResolver />} />
+                <Route
+                  path="create"
+                  element={<RequireRole allowedRoles={["CUSTOMER"]} />}
+                >
+                  <Route
+                    index
+                    element={<h1 className="text-white">CREATE_TICKET_PAGE</h1>}
+                  />
+                </Route>
+                <Route path=":id" element={<TicketDetailsContentResolver />} />
               </Route>
-              <Route path="services" element={<RoleBasedServices />} />
-              <Route path="customers" element={<RoleBasedCustomers />} />
-              <Route path="technicians" element={<RoleBasedTechnicians />}>
-                <Route index element={<DashboardAdminTechniciansContent />} />
-                <Route path=":userId/edit" element={<EditTechnician />} />
-                <Route path="create" element={<CreateTechnician />} />
+              <Route element={<RequireRole allowedRoles={["ADMIN"]} />}>
+                <Route
+                  path="services"
+                  element={<DashboardAdminServicesContent />}
+                />
+                <Route
+                  path="customers"
+                  element={<DashboardAdminCustomersContent />}
+                />
+                <Route path="technicians">
+                  <Route index element={<DashboardAdminTechniciansContent />} />
+                  <Route path=":userId/edit" element={<EditTechnician />} />
+                  <Route path="create" element={<CreateTechnician />} />
+                </Route>
               </Route>
+
               <Route path="*" element={<NotFoundDashboard />} />
             </Route>
           </Route>

@@ -1,7 +1,7 @@
 import { Outlet } from "react-router";
 import { DashboardSidebar } from "./dashboard-side-bar";
 
-const DashboardAdmin = () => {
+const DashboardLayout = () => {
   return (
     <div className="flex bg-gray-100 max-md:flex-col">
       <DashboardSidebar />
@@ -10,4 +10,4 @@ const DashboardAdmin = () => {
   );
 };
 
-export default DashboardAdmin;
+export default DashboardLayout;
