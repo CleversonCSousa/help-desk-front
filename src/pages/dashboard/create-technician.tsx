@@ -1,9 +1,16 @@
-import { ArrowLeft, X } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { Link, useNavigate } from "react-router";
 import { FormGroup } from "../../components/form-group";
 import { useForm } from "react-hook-form";
 import { useCreateTechnicianMutation } from "../../features/technician/api-slice";
 import { toast } from "sonner";
+import {
+  AFTERNOON_HOURS,
+  EVENING_HOURS,
+  MORNING_HOURS,
+} from "../../utils/constants";
+import { Avatar } from "../../components/avatar";
+import { WorkingHourBlock } from "../../components/working-hour-block";
 
 type WorkingHourData = {
   timeSlot: string;
@@ -68,30 +75,6 @@ export const CreateTechnician = () => {
   const currentWorkingHours = watch("workingHours") || [];
   const currentName = watch("name") || "";
 
-  function getInitialsName(name: string) {
-    if (!name.trim()) {
-      return { firstLetter: "", lastLetter: "" };
-    }
-
-    const splitName = name.trim().split(/\s+/);
-
-    const firstLetter = splitName[0][0];
-
-    if (splitName.length === 1) {
-      return {
-        firstLetter,
-        lastLetter: "",
-      };
-    }
-
-    return {
-      firstLetter,
-      lastLetter: splitName[splitName.length - 1][0],
-    };
-  }
-
-  const initialsName = getInitialsName(currentName);
-
   function handleToggleWorkingHour(time: string) {
     // checks if the index already exists
     const existsIndex = currentWorkingHours.findIndex((wh) =>
@@ -110,17 +93,6 @@ export const CreateTechnician = () => {
     // shouldDirty: true, this serves to notify React Hook Form that something has changed
     setValue("workingHours", updated, { shouldDirty: true });
   }
-
-  const MORNING_HOURS = ["07:00", "08:00", "09:00", "10:00", "11:00", "12:00"];
-  const AFTERNOON_HOURS = [
-    "13:00",
-    "14:00",
-    "15:00",
-    "16:00",
-    "17:00",
-    "18:00",
-  ];
-  const EVENING_HOURS = ["19:00", "20:00", "21:00", "22:00", "23:00"];
 
   return (
     <main className="flex flex-1 justify-center overflow-y-auto rounded-tl-3xl bg-white p-4 text-gray-200 min-[381px]:p-6 md:mt-3 md:p-12 md:pt-13 md:pr-12 md:pb-12">
@@ -176,9 +148,10 @@ export const CreateTechnician = () => {
                 </p>
               </div>
             </header>
-            <div className="profile-avatar bg-brand-blue-dark flex h-12 w-12 items-center justify-center rounded-full text-xl text-gray-600 md:h-16 md:w-16 md:text-2xl">
-              {initialsName.firstLetter} {initialsName.lastLetter}
-            </div>
+            <Avatar
+              name={currentName}
+              className="h-12 w-12 text-xl md:h-16 md:w-16 md:text-2xl"
+            />
             <div className="flex flex-col gap-4">
               <FormGroup
                 label="NAME"
@@ -227,96 +200,24 @@ export const CreateTechnician = () => {
               </div>
             </header>
             <div className="working-hours flex flex-col gap-5">
-              <div>
-                <p className="text-xs font-bold text-gray-300">MORNING</p>
-                <div className="mt-2 flex flex-wrap gap-2">
-                  {MORNING_HOURS.map((time) => {
-                    const isSelected = currentWorkingHours.some((wh) =>
-                      wh.timeSlot.startsWith(time),
-                    );
-
-                    return (
-                      <button
-                        key={time}
-                        type="button"
-                        onClick={() => handleToggleWorkingHour(time)}
-                        className={`working-hour flex shrink-0 cursor-pointer items-center gap-1.5 rounded-full border px-2.5 py-1 text-sm font-bold transition-colors ${
-                          isSelected
-                            ? "bg-brand-blue-base text-gray-600"
-                            : "border-gray-400 text-gray-200"
-                        }`}
-                      >
-                        <span>{time}</span>
-                        {isSelected && (
-                          <span>
-                            <X size={14} />
-                          </span>
-                        )}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-              <div>
-                <p className="text-xs font-bold text-gray-300">AFTERNOON</p>
-                <div className="mt-2 flex flex-wrap gap-2">
-                  {AFTERNOON_HOURS.map((time) => {
-                    const isSelected = currentWorkingHours.some((wh) =>
-                      wh.timeSlot.startsWith(time),
-                    );
-
-                    return (
-                      <button
-                        key={time}
-                        type="button"
-                        onClick={() => handleToggleWorkingHour(time)}
-                        className={`working-hour flex shrink-0 cursor-pointer items-center gap-1.5 rounded-full border px-2.5 py-1 text-sm font-bold transition-colors ${
-                          isSelected
-                            ? "bg-brand-blue-base text-gray-600"
-                            : "border-gray-400 text-gray-200"
-                        }`}
-                      >
-                        <span>{time}</span>
-                        {isSelected && (
-                          <span>
-                            <X size={14} />
-                          </span>
-                        )}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-              <div>
-                <p className="text-xs font-bold text-gray-300">EVENING</p>
-                <div className="mt-2 flex flex-wrap gap-2">
-                  {EVENING_HOURS.map((time) => {
-                    const isSelected = currentWorkingHours.some((wh) =>
-                      wh.timeSlot.startsWith(time),
-                    );
-
-                    return (
-                      <button
-                        key={time}
-                        type="button"
-                        onClick={() => handleToggleWorkingHour(time)}
-                        className={`working-hour flex shrink-0 cursor-pointer items-center gap-1.5 rounded-full border px-2.5 py-1 text-sm font-bold transition-colors ${
-                          isSelected
-                            ? "bg-brand-blue-base text-gray-600"
-                            : "border-gray-400 text-gray-200"
-                        }`}
-                      >
-                        <span>{time}</span>
-                        {isSelected && (
-                          <span>
-                            <X size={14} />
-                          </span>
-                        )}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
+              <WorkingHourBlock
+                title="Morning"
+                hours={MORNING_HOURS}
+                currentWorkingHours={currentWorkingHours}
+                onToggle={handleToggleWorkingHour}
+              />
+              <WorkingHourBlock
+                title="Afternoon"
+                hours={AFTERNOON_HOURS}
+                currentWorkingHours={currentWorkingHours}
+                onToggle={handleToggleWorkingHour}
+              />
+              <WorkingHourBlock
+                title="Evening"
+                hours={EVENING_HOURS}
+                currentWorkingHours={currentWorkingHours}
+                onToggle={handleToggleWorkingHour}
+              />
             </div>
           </div>
         </div>

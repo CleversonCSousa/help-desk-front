@@ -53,7 +53,7 @@ export const UpdateCustomerForm = ({
       reset();
 
       onSuccess();
-    } catch (error: any) {
+    } catch (error) {
       if (error?.status === 409) {
         setError("email", {
           type: "server",

@@ -28,7 +28,7 @@ export const ToggleIsActive = ({ id, value }: ToggleIsActiveProps) => {
       className="flex cursor-pointer items-center gap-1 text-sm text-gray-300 hover:text-gray-700"
     >
       {value ? <Ban size={16} /> : <Check size={16} />}
-      <span className="hidden md:inline">
+      <span className="hidden lg:inline">
         {value ? "Deactivate" : "Reactivate"}
       </span>
     </button>

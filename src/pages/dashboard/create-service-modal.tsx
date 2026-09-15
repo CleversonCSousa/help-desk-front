@@ -1,6 +1,7 @@
-import { Plus, X } from "lucide-react";
+import { Plus } from "lucide-react";
 import { useState } from "react";
 import { CreateServiceForm } from "./create-service-form";
+import { Modal } from "../../components/modal";
 
 export const CreateServiceModal = () => {
   const [modal, setModal] = useState(false);
@@ -18,21 +19,9 @@ export const CreateServiceModal = () => {
         <Plus size={18} />
         <span className="font-bold text-gray-600">New</span>
       </button>
-      {modal && (
-        <div className="fixed inset-0 z-1 flex items-center justify-center bg-black/50">
-          <div className="mx-4 w-full max-w-md rounded-lg border-gray-500 bg-white">
-            <header className="flex items-center justify-between px-7 py-5">
-              <h2 className="text-xl font-bold text-gray-200">
-                Create service
-              </h2>
-              <button onClick={toggleModal} className="text-gray-300">
-                <X size={24} />
-              </button>
-            </header>
-            <CreateServiceForm onSuccess={toggleModal} />
-          </div>
-        </div>
-      )}
+      <Modal isOpen={modal} onClose={toggleModal} title="Create service">
+        <CreateServiceForm onSuccess={toggleModal} />
+      </Modal>
     </>
   );
 };

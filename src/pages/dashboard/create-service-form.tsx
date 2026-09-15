@@ -31,7 +31,7 @@ export const CreateServiceForm = ({ onSuccess }: CreateServiceFormProps) => {
   async function onSubmit({ title, description, price }: CreateServiceData) {
     try {
       setApiError(null);
-      const { service, message } = await createServiceApi({
+      const { message } = await createServiceApi({
         title,
         description,
         price,

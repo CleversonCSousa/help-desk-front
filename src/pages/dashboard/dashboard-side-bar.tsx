@@ -2,12 +2,92 @@ import {
   BriefcaseBusiness,
   ClipboardList,
   Menu,
+  Plus,
   Users,
   Wrench,
 } from "lucide-react";
 import { DashboardSidebarNavLink } from "./dashboard-side-bar-nav-link";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "../../features/auth/auth-slice";
+
+const ROLE_LABELS: Record<string, string> = {
+  ADMIN: "ADMIN",
+  TECHNICIAN: "TECHNICIAN",
+  CUSTOMER: "CUSTOMER",
+};
 
 export const DashboardSidebar = () => {
+  const user = useSelector(selectCurrentUser);
+
+  const renderNavLinks = () => {
+    switch (user?.role) {
+      case "ADMIN":
+        return (
+          <>
+            <li className="flex justify-center">
+              <DashboardSidebarNavLink
+                icon={<ClipboardList />}
+                title="Tickets"
+                to="/dashboard/tickets"
+              />
+            </li>
+            <li className="flex justify-center">
+              <DashboardSidebarNavLink
+                icon={<Users />}
+                title="Technicians"
+                to="/dashboard/technicians"
+              />
+            </li>
+            <li className="flex justify-center">
+              <DashboardSidebarNavLink
+                icon={<BriefcaseBusiness />}
+                title="Customers"
+                to="/dashboard/customers"
+              />
+            </li>
+            <li className="flex justify-center">
+              <DashboardSidebarNavLink
+                icon={<Wrench />}
+                title="Services"
+                to="/dashboard/services"
+              />
+            </li>
+          </>
+        );
+      case "TECHNICIAN":
+        return (
+          <li className="flex justify-center">
+            <DashboardSidebarNavLink
+              icon={<ClipboardList />}
+              title="My tickets"
+              to="/dashboard/tickets"
+            />
+          </li>
+        );
+      case "CUSTOMER":
+        return (
+          <>
+            <li className="flex justify-center">
+              <DashboardSidebarNavLink
+                icon={<ClipboardList />}
+                title="My tickets"
+                to="/dashboard/tickets"
+              />
+            </li>
+            <li className="flex justify-center">
+              <DashboardSidebarNavLink
+                icon={<Plus />}
+                title="Create ticket"
+                to="/dashboard/tickets/create"
+              />
+            </li>
+          </>
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
     <div className="border-gray-200 text-white max-md:flex max-md:w-full max-md:items-center max-md:justify-between md:h-screen md:w-20 md:max-w-[17.5rem] xl:w-[17.5rem]">
       <div className="items-center max-md:hidden md:flex">
@@ -16,42 +96,13 @@ export const DashboardSidebar = () => {
           <div className="font-bold max-md:block md:hidden xl:block">
             <p className="text-xl leading-none md:text-2xl">HelpDesk</p>
             <span className="text-brand-blue-light leading-none max-md:text-xs">
-              ADMIN
+              {ROLE_LABELS[user.role]}
             </span>
           </div>
         </header>
       </div>
       <nav className="p-2 max-md:hidden xl:px-4 xl:py-5">
-        <ul className="flex flex-col gap-1">
-          <li className="flex justify-center">
-            <DashboardSidebarNavLink
-              icon={<ClipboardList />}
-              title="Tickets"
-              to="/dashboard/tickets"
-            />
-          </li>
-          <li className="flex justify-center">
-            <DashboardSidebarNavLink
-              icon={<Users />}
-              title="Technicians"
-              to="/dashboard/technicians"
-            />
-          </li>
-          <li className="flex justify-center">
-            <DashboardSidebarNavLink
-              icon={<BriefcaseBusiness />}
-              title="Customers"
-              to="/dashboard/customers"
-            />
-          </li>
-          <li className="flex justify-center">
-            <DashboardSidebarNavLink
-              icon={<Wrench />}
-              title="Services"
-              to="/dashboard/services"
-            />
-          </li>
-        </ul>
+        <ul className="flex flex-col gap-1">{renderNavLinks()}</ul>
       </nav>
       {/* Navbar mobile */}
       <nav className="flex w-full items-center justify-between p-6 md:hidden">
@@ -64,7 +115,7 @@ export const DashboardSidebar = () => {
             <div className="font-bold max-md:block md:hidden xl:block">
               <p className="text-xl leading-none md:text-2xl">HelpDesk</p>
               <span className="text-brand-blue-light leading-none max-md:text-xs">
-                ADMIN
+                {ROLE_LABELS[user.role]}
               </span>
             </div>
           </div>

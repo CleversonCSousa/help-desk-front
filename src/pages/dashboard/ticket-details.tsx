@@ -1,17 +1,10 @@
-import {
-  ArrowLeft,
-  CheckCircle2Icon,
-  CircleCheckBig,
-  CircleQuestionMark,
-  Clock2,
-  ClockIcon,
-} from "lucide-react";
+import { ArrowLeft, CircleCheckBig, Clock2 } from "lucide-react";
 import { Link, useParams } from "react-router";
-import {
-  useGetTicketQuery,
-  type TicketStatus,
-} from "../../features/ticket/api-slice";
-import type { ReactNode } from "react";
+import { useGetTicketQuery } from "../../features/ticket/api-slice";
+import { formatDate } from "../../utils/format-date";
+import { formatCurrency } from "../../utils/format-currency";
+import { TICKET_STATUS_CONFIG } from "../../utils/status-config";
+import { Avatar } from "../../components/avatar";
 
 export const TicketDetails = () => {
   const { id } = useParams();
@@ -43,67 +36,7 @@ export const TicketDetails = () => {
     );
   }
 
-  function getInitialsName(name: string) {
-    const splitName = name.trim().split(/\s+/);
-
-    const firstLetter = splitName[0][0];
-
-    if (splitName.length === 1) {
-      return {
-        firstLetter,
-        lastLetter: "",
-      };
-    }
-
-    return {
-      firstLetter,
-      lastLetter: splitName[splitName.length - 1][0],
-    };
-  }
-
-  const formatDate = (dateString: string) => {
-    if (!dateString) return "";
-    const date = new Date(dateString);
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    const year = String(date.getFullYear()).slice(-2);
-
-    const hours = String(date.getHours()).padStart(2, "0");
-    const minutes = String(date.getMinutes()).padStart(2, "0");
-    return `${month}/${day}/${year} ${hours}:${minutes}`;
-  };
-
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-    }).format(value);
-  };
-
-  const statusConfig: Record<
-    TicketStatus,
-    { label: string; className: string; icon: ReactNode }
-  > = {
-    OPEN: {
-      label: "Open",
-      className: "text-feedback-open bg-feedback-open/20",
-      icon: <CircleQuestionMark size={16} />,
-    },
-    IN_PROGRESS: {
-      label: "In progress",
-      className: "text-feedback-progress bg-feedback-progress/20",
-      icon: <ClockIcon size={16} />,
-    },
-    CLOSED: {
-      label: "Closed",
-      className: "text-feedback-done bg-feedback-done/20",
-      icon: <CheckCircle2Icon size={16} />,
-    },
-  };
-
-  const currentStatus = statusConfig[ticket.status];
-  const customerInitials = getInitialsName(ticket.customer.name);
-  const technicianInitials = getInitialsName(ticket.technician.name);
+  const currentStatus = TICKET_STATUS_CONFIG[ticket.status];
 
   return (
     <main className="flex flex-1 justify-center overflow-y-auto rounded-tl-3xl bg-white p-4 text-gray-200 min-[381px]:p-6 md:mt-3 md:p-12 md:pt-13 md:pr-12 md:pb-12">
@@ -181,10 +114,10 @@ export const TicketDetails = () => {
             <div>
               <span className="text-sm font-bold text-gray-400">Customer</span>
               <div className="mt-2 flex items-center gap-2 font-medium text-gray-200">
-                <div className="bg-brand-blue-dark flex h-7 w-7 items-center justify-center rounded-full text-xs text-gray-600">
-                  {customerInitials.firstLetter}
-                  {customerInitials.lastLetter}
-                </div>
+                <Avatar
+                  name={ticket.customer.name}
+                  className="h-7 w-7 text-xs"
+                />
                 {ticket.customer.name}
               </div>
             </div>
@@ -195,10 +128,10 @@ export const TicketDetails = () => {
                 Responsible technician
               </span>
               <div className="mt-2 flex gap-2">
-                <div className="bg-brand-blue-dark flex h-12 w-12 items-center justify-center rounded-full text-xl text-gray-600">
-                  {technicianInitials.firstLetter}
-                  {technicianInitials.lastLetter}
-                </div>
+                <Avatar
+                  name={ticket.technician.name}
+                  className="h-12 w-12 text-xl"
+                />
                 <div className="flex flex-col">
                   {ticket.technician.name}
                   <span className="text-sm text-gray-300">
