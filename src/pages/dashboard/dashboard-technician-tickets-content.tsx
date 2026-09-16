@@ -5,10 +5,12 @@ import { TICKET_STATUS_CONFIG } from "../../utils/status-config";
 import { Avatar } from "../../components/avatar";
 import {
   useListTicketsQuery,
+  useUpdateTicketStatusMutation,
   type TicketSummary,
 } from "../../features/ticket/api-slice";
 import { formatDate } from "../../utils/format-date";
 import { formatCurrency } from "../../utils/format-currency";
+import { toast } from "sonner";
 
 type CardProps = {
   ticket: TicketSummary;
@@ -16,6 +18,45 @@ type CardProps = {
 
 const Card = ({ ticket }: CardProps) => {
   const currentStatus = TICKET_STATUS_CONFIG[ticket.status];
+
+  const [updateStatus, { isLoading }] = useUpdateTicketStatusMutation();
+
+  const handleStartTicket = async () => {
+    try {
+      await updateStatus({ ticket, newStatus: "IN_PROGRESS" }).unwrap();
+      toast.success("Ticket started successfully", {
+        classNames: {
+          icon: "text-green-500",
+        },
+      });
+    } catch (error) {
+      const errorMessage = error?.data?.message || "Internal server error";
+      toast.error(errorMessage, {
+        classNames: {
+          icon: "text-red-500",
+        },
+      });
+    }
+  };
+
+  const handleCloseTicket = async () => {
+    try {
+      await updateStatus({ ticket, newStatus: "CLOSED" }).unwrap();
+      toast.success("Ticket closed successfully", {
+        classNames: {
+          icon: "text-green-500",
+        },
+      });
+    } catch (error) {
+      const errorMessage = error?.data?.message || "Internal server error";
+      toast.error(errorMessage, {
+        classNames: {
+          icon: "text-red-500",
+        },
+      });
+    }
+  };
+
   return (
     <div className="flex flex-col gap-4 rounded-xl border border-gray-500 p-5">
       <div className="flex justify-between">
@@ -33,6 +74,8 @@ const Card = ({ ticket }: CardProps) => {
               className="text-md flex w-auto items-center gap-1 px-2 font-bold"
               icon={<CircleCheckBig size={16} />}
               variant="primary"
+              onClick={handleCloseTicket}
+              disabled={isLoading}
             >
               Close
             </IconButton>
@@ -42,6 +85,8 @@ const Card = ({ ticket }: CardProps) => {
               className="text-md flex w-auto items-center gap-1 px-2 font-bold"
               icon={<Clock2 size={16} />}
               variant="primary"
+              onClick={handleStartTicket}
+              disabled={isLoading}
             >
               Start
             </IconButton>
