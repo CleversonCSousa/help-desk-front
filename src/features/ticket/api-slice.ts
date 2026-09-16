@@ -64,12 +64,23 @@ export type TicketDetail = {
   additionalServices: Array<AdditionalServiceDTO>;
 };
 
+export type ListTicketsParams = {
+  page?: number;
+  size?: number;
+  status?: TicketStatus;
+};
+
 export const ticketApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    listTickets: builder.query<PaginatedResponse, number>({
-      query: (page: number = 0) => ({
-        url: `/tickets?page=${page}`,
+    listTickets: builder.query<PaginatedResponse, ListTicketsParams>({
+      query: (params) => ({
+        url: `/tickets?`,
         method: "GET",
+        params: {
+          page: params?.page ?? 0,
+          size: params?.size,
+          status: params?.status,
+        },
       }),
     }),
     getTicket: builder.query<TicketDetail, string>({
