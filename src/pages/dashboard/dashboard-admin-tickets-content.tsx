@@ -12,7 +12,9 @@ import { Table, Td, Th } from "../../components/table";
 export const DashboardAdminTicketsContent = () => {
   const [currentPage, setCurrentPage] = useState(0);
 
-  const { data: pageData, isLoading } = useListTicketsQuery(currentPage);
+  const { data: pageData, isLoading } = useListTicketsQuery({
+    page: currentPage,
+  });
   if (isLoading) {
     return null;
   }

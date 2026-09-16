@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import { DashboardAdminTicketsContent } from "../pages/dashboard/dashboard-admin-tickets-content";
 import { selectCurrentUser } from "../features/auth/auth-slice";
+import { DashboardTechnicianTicketsContent } from "../pages/dashboard/dashboard-technician-tickets-content";
 
 export const TicketContentResolver = () => {
   const user = useSelector(selectCurrentUser);
@@ -9,7 +10,7 @@ export const TicketContentResolver = () => {
     case "ADMIN":
       return <DashboardAdminTicketsContent />;
     case "TECHNICIAN":
-      return <h1 className="text-white">/tickets [TECHNICIAN]</h1>;
+      return <DashboardTechnicianTicketsContent />;
     case "CUSTOMER":
       return <h1 className="text-white">/tickets [CUSTOMER]</h1>;
     default:
