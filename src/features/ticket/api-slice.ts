@@ -128,6 +128,17 @@ export const ticketApiSlice = apiSlice.injectEndpoints({
               },
             ),
           );
+
+          // update the ticket on the details page
+          dispatch(
+            ticketApiSlice.util.updateQueryData(
+              "getTicket",
+              ticket.id,
+              (draft) => {
+                draft.status = newStatus;
+              },
+            ),
+          );
         } catch (error) {
           console.error("Failed to update ticket cache", error);
         }

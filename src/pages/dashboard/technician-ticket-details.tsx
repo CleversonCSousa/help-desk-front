@@ -1,11 +1,15 @@
 import { ArrowLeft, CircleCheckBig, Clock2, Plus, Trash } from "lucide-react";
 import { Link, useParams } from "react-router";
-import { useGetTicketQuery } from "../../features/ticket/api-slice";
+import {
+  useGetTicketQuery,
+  useUpdateTicketStatusMutation,
+} from "../../features/ticket/api-slice";
 import { formatDate } from "../../utils/format-date";
 import { formatCurrency } from "../../utils/format-currency";
 import { TICKET_STATUS_CONFIG } from "../../utils/status-config";
 import { Avatar } from "../../components/avatar";
 import { IconButton } from "../../components/icon-button";
+import { toast } from "sonner";
 
 export const TicketDetailsTechnician = () => {
   const { id } = useParams();
@@ -18,6 +22,108 @@ export const TicketDetailsTechnician = () => {
     // avoid search if the ID does not exist
     skip: !id,
   });
+
+  const [updateStatus, { isLoading: isUpdatingStatus }] =
+    useUpdateTicketStatusMutation();
+
+  const handleStartTicket = async () => {
+    try {
+      const ticketSummary = {
+        id: ticket.id,
+        code: ticket.code,
+        title: ticket.title,
+        serviceName: ticket.service.title,
+        totalPrice: ticket.totalPrice,
+        customerName: ticket.customer.name,
+        technicianName: ticket.technician.name,
+        status: ticket.status,
+        updatedAt: ticket.updatedAt,
+      };
+
+      await updateStatus({
+        ticket: ticketSummary,
+        newStatus: "IN_PROGRESS",
+      }).unwrap();
+      toast.success("Ticket started successfully", {
+        classNames: {
+          icon: "text-green-500",
+        },
+      });
+    } catch (error) {
+      const errorMessage = error?.data?.message || "Internal server error";
+      toast.error(errorMessage, {
+        classNames: {
+          icon: "text-red-500",
+        },
+      });
+    }
+  };
+
+  const handleReopenTicket = async () => {
+    try {
+      const ticketSummary = {
+        id: ticket.id,
+        code: ticket.code,
+        title: ticket.title,
+        serviceName: ticket.service.title,
+        totalPrice: ticket.totalPrice,
+        customerName: ticket.customer.name,
+        technicianName: ticket.technician.name,
+        status: ticket.status,
+        updatedAt: ticket.updatedAt,
+      };
+
+      await updateStatus({
+        ticket: ticketSummary,
+        newStatus: "OPEN",
+      }).unwrap();
+      toast.success("Ticket reopened successfully", {
+        classNames: {
+          icon: "text-green-500",
+        },
+      });
+    } catch (error) {
+      const errorMessage = error?.data?.message || "Internal server error";
+      toast.error(errorMessage, {
+        classNames: {
+          icon: "text-red-500",
+        },
+      });
+    }
+  };
+
+  const handleCloseTicket = async () => {
+    try {
+      const ticketSummary = {
+        id: ticket.id,
+        code: ticket.code,
+        title: ticket.title,
+        serviceName: ticket.service.title,
+        totalPrice: ticket.totalPrice,
+        customerName: ticket.customer.name,
+        technicianName: ticket.technician.name,
+        status: ticket.status,
+        updatedAt: ticket.updatedAt,
+      };
+
+      await updateStatus({
+        ticket: ticketSummary,
+        newStatus: "CLOSED",
+      }).unwrap();
+      toast.success("Ticket closed successfully", {
+        classNames: {
+          icon: "text-green-500",
+        },
+      });
+    } catch (error) {
+      const errorMessage = error?.data?.message || "Internal server error";
+      toast.error(errorMessage, {
+        classNames: {
+          icon: "text-red-500",
+        },
+      });
+    }
+  };
 
   if (isLoading) {
     return (
@@ -62,25 +168,41 @@ export const TicketDetailsTechnician = () => {
             <div className="btns flex gap-2 font-bold max-md:grid max-md:grid-cols-2">
               {ticket.status === "OPEN" && (
                 <>
-                  <button className="flex h-10 cursor-pointer items-center justify-center gap-2 rounded-lg bg-gray-500 px-4 text-gray-200 transition-colors hover:opacity-90 disabled:opacity-50">
+                  <button
+                    onClick={handleCloseTicket}
+                    disabled={isUpdatingStatus}
+                    className="flex h-10 cursor-pointer items-center justify-center gap-2 rounded-lg bg-gray-500 px-4 text-gray-200 transition-colors hover:opacity-90 disabled:opacity-50"
+                  >
                     <CircleCheckBig size={18} className="text-gray-300" />
                     Closed
                   </button>
-                  <button className="flex h-10 cursor-pointer items-center justify-center gap-2 rounded-lg bg-gray-200 px-4 text-gray-600 transition-colors hover:opacity-90 disabled:opacity-50">
+                  <button
+                    onClick={handleStartTicket}
+                    disabled={isUpdatingStatus}
+                    className="flex h-10 cursor-pointer items-center justify-center gap-2 rounded-lg bg-gray-200 px-4 text-gray-600 transition-colors hover:opacity-90 disabled:opacity-50"
+                  >
                     <Clock2 size={18} />
                     Start ticket
                   </button>
                 </>
               )}
               {ticket.status === "IN_PROGRESS" && (
-                <button className="flex h-10 cursor-pointer items-center justify-center gap-2 rounded-lg bg-gray-200 px-4 text-gray-600 transition-colors hover:opacity-90 disabled:opacity-50">
+                <button
+                  onClick={handleCloseTicket}
+                  disabled={isUpdatingStatus}
+                  className="flex h-10 cursor-pointer items-center justify-center gap-2 rounded-lg bg-gray-200 px-4 text-gray-600 transition-colors hover:opacity-90 disabled:opacity-50"
+                >
                   <CircleCheckBig size={18} />
                   Closed
                 </button>
               )}
 
               {ticket.status === "CLOSED" && (
-                <button className="flex h-10 cursor-pointer items-center justify-center gap-2 rounded-lg bg-gray-200 px-4 text-gray-600 transition-colors hover:opacity-90 disabled:opacity-50">
+                <button
+                  onClick={handleReopenTicket}
+                  disabled={isUpdatingStatus}
+                  className="flex h-10 cursor-pointer items-center justify-center gap-2 rounded-lg bg-gray-200 px-4 text-gray-600 transition-colors hover:opacity-90 disabled:opacity-50"
+                >
                   <Clock2 size={18} />
                   Reopen
                 </button>
