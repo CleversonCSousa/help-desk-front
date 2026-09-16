@@ -89,7 +89,55 @@ export const ticketApiSlice = apiSlice.injectEndpoints({
         method: "GET",
       }),
     }),
+    updateTicketStatus: builder.mutation<
+      void,
+      { ticket: TicketSummary; newStatus: TicketStatus }
+    >({
+      query: ({ ticket, newStatus }) => ({
+        url: `/tickets/${ticket.id}/status`,
+        method: "PATCH",
+        body: { status: newStatus },
+      }),
+      async onQueryStarted(
+        { ticket, newStatus },
+        { dispatch, queryFulfilled },
+      ) {
+        try {
+          await queryFulfilled;
+
+          // remove the ticket from the set of tickets that have the old status
+          dispatch(
+            ticketApiSlice.util.updateQueryData(
+              "listTickets",
+              {
+                status: ticket.status,
+              },
+              (draft) => {
+                draft.content = draft.content.filter((t) => t.id !== ticket.id);
+              },
+            ),
+          );
+
+          // add the ticket to the set of tickets that have the new status
+          dispatch(
+            ticketApiSlice.util.updateQueryData(
+              "listTickets",
+              { status: newStatus },
+              (draft) => {
+                draft.content.unshift({ ...ticket, status: newStatus });
+              },
+            ),
+          );
+        } catch (error) {
+          console.error("Failed to update ticket cache", error);
+        }
+      },
+    }),
   }),
 });
 
-export const { useListTicketsQuery, useGetTicketQuery } = ticketApiSlice;
+export const {
+  useListTicketsQuery,
+  useGetTicketQuery,
+  useUpdateTicketStatusMutation,
+} = ticketApiSlice;
