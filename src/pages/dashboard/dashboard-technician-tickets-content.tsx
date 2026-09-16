@@ -11,6 +11,7 @@ import {
 import { formatDate } from "../../utils/format-date";
 import { formatCurrency } from "../../utils/format-currency";
 import { toast } from "sonner";
+import { NavLink } from "react-router";
 
 type CardProps = {
   ticket: TicketSummary;
@@ -68,7 +69,9 @@ const Card = ({ ticket }: CardProps) => {
           <p className="text-md text-gray-200">{ticket.serviceName}</p>
         </div>
         <div className="flex gap-1">
-          <IconButton icon={<PenLine size={16} />} />
+          <NavLink to={`/dashboard/tickets/${ticket.id}`}>
+            <IconButton icon={<PenLine size={16} />} />
+          </NavLink>
           {ticket.status === "IN_PROGRESS" && (
             <IconButton
               className="text-md flex w-auto items-center gap-1 px-2 font-bold"

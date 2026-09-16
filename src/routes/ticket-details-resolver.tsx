@@ -3,6 +3,7 @@ import { TicketDetailsAdmin } from "../pages/dashboard/ticket-details";
 import { selectCurrentUser } from "../features/auth/auth-slice";
 import { useParams } from "react-router";
 import { NotFoundDashboard } from "../pages/not-found-dashboard";
+import { TicketDetailsTechnician } from "../pages/dashboard/technician-ticket-details";
 
 export const TicketDetailsContentResolver = () => {
   const user = useSelector(selectCurrentUser);
@@ -17,7 +18,7 @@ export const TicketDetailsContentResolver = () => {
     case "ADMIN":
       return <TicketDetailsAdmin />;
     case "TECHNICIAN":
-      return <h1 className="text-white">/tickets/:id [TECHNICIAN]</h1>;
+      return <TicketDetailsTechnician />;
     case "CUSTOMER":
       return <h1 className="text-white">/tickets/:id [CUSTOMER]</h1>;
     default:
