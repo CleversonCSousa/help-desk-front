@@ -1,4 +1,4 @@
-import { ArrowLeft, CircleCheckBig, Clock2, Plus, Trash } from "lucide-react";
+import { ArrowLeft, CircleCheckBig, Clock2, Trash } from "lucide-react";
 import { Link, useParams } from "react-router";
 import {
   useGetTicketQuery,
@@ -10,10 +10,10 @@ import { TICKET_STATUS_CONFIG } from "../../utils/status-config";
 import { Avatar } from "../../components/avatar";
 import { IconButton } from "../../components/icon-button";
 import { toast } from "sonner";
+import { CreateAdditionalServiceModal } from "./create-additional-service-modal";
 
 export const TicketDetailsTechnician = () => {
   const { id } = useParams();
-
   const {
     data: ticket,
     isLoading,
@@ -279,7 +279,7 @@ export const TicketDetailsTechnician = () => {
                 <p className="text-sm font-bold text-gray-400">
                   Additional services
                 </p>
-                <IconButton icon={<Plus size={16} />} variant="primary" />
+                <CreateAdditionalServiceModal ticketId={ticket.id} />
               </div>
               <div
                 className={`text-sm ${ticket.additionalServices.length > 0 ? "" : "hidden"}`}
