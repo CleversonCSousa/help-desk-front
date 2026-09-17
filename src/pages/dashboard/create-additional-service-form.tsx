@@ -61,9 +61,11 @@ export const CreateAdditionalServiceForm = ({
       <div className="flex flex-col gap-4 border-y border-gray-500 p-7 pb-8">
         <FormGroup
           label="DESCRIPTION"
-          placeholder="Additional service description"
+          placeholder="Service description"
           type="text"
-          registration={register("description")}
+          registration={register("description", {
+            required: "Description is required",
+          })}
           error={errors.description}
         />
         <FormGroup
@@ -72,6 +74,7 @@ export const CreateAdditionalServiceForm = ({
           step="0.01"
           type="number"
           registration={register("price", {
+            required: "Price is required",
             valueAsNumber: true,
           })}
           error={errors.price}
