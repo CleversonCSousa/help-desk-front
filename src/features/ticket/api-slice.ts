@@ -144,6 +144,42 @@ export const ticketApiSlice = apiSlice.injectEndpoints({
         }
       },
     }),
+    createAdditionalService: builder.mutation<
+      AdditionalServiceDTO,
+      { ticketId: string; description: string; price: number }
+    >({
+      query: ({ ticketId, description, price }) => ({
+        url: `/tickets/${ticketId}/additional-services`,
+        method: "POST",
+        body: {
+          description,
+          price,
+        },
+      }),
+      async onQueryStarted({ ticketId }, { dispatch, queryFulfilled }) {
+        try {
+          const {
+            data: { id, price, description },
+          } = await queryFulfilled;
+
+          dispatch(
+            ticketApiSlice.util.updateQueryData(
+              "getTicket",
+              ticketId,
+              (draft) => {
+                draft.additionalServices.push({
+                  id,
+                  price,
+                  description,
+                });
+              },
+            ),
+          );
+        } catch (error) {
+          console.error("Failed to update ticket cache", error);
+        }
+      },
+    }),
   }),
 });
 
@@ -151,4 +187,5 @@ export const {
   useListTicketsQuery,
   useGetTicketQuery,
   useUpdateTicketStatusMutation,
+  useCreateAdditionalServiceMutation,
 } = ticketApiSlice;
