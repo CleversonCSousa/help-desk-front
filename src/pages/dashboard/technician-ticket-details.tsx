@@ -342,7 +342,7 @@ export const TicketDetailsTechnician = () => {
               </div>
               <div className="flex justify-between border-t border-gray-500 pt-3 font-bold text-gray-200">
                 <span>Total</span>
-                {formatCurrency(ticket.totalPrice + totalAdditionals)}
+                {formatCurrency(ticket.totalPrice)}
               </div>
             </div>
           </div>
