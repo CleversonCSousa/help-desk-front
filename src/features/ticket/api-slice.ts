@@ -172,11 +172,48 @@ export const ticketApiSlice = apiSlice.injectEndpoints({
                   price,
                   description,
                 });
+                draft.totalPrice += price;
               },
             ),
           );
         } catch (error) {
           console.error("Failed to update ticket cache", error);
+        }
+      },
+    }),
+    deleteAdditionalService: builder.mutation<
+      void,
+      { ticketId: string; additionalServiceId: string }
+    >({
+      query: ({ ticketId, additionalServiceId }) => ({
+        url: `/tickets/${ticketId}/additional-services/${additionalServiceId}`,
+        method: "DELETE",
+      }),
+      async onQueryStarted(
+        { ticketId, additionalServiceId },
+        { dispatch, queryFulfilled },
+      ) {
+        try {
+          await queryFulfilled;
+
+          dispatch(
+            ticketApiSlice.util.updateQueryData(
+              "getTicket",
+              ticketId,
+              (draft) => {
+                const additionalService = draft.additionalServices.find(
+                  (service) => service.id === additionalServiceId,
+                );
+
+                draft.totalPrice -= additionalService.price;
+                draft.additionalServices = draft.additionalServices.filter(
+                  (service) => service.id !== additionalServiceId,
+                );
+              },
+            ),
+          );
+        } catch (error) {
+          console.error("Failed to delete additional service cache", error);
         }
       },
     }),
@@ -188,4 +225,5 @@ export const {
   useGetTicketQuery,
   useUpdateTicketStatusMutation,
   useCreateAdditionalServiceMutation,
+  useDeleteAdditionalServiceMutation,
 } = ticketApiSlice;
