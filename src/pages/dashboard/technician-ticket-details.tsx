@@ -1,4 +1,4 @@
-import { ArrowLeft, CircleCheckBig, Clock2, Trash } from "lucide-react";
+import { ArrowLeft, CircleCheckBig, Clock2 } from "lucide-react";
 import { Link, useParams } from "react-router";
 import {
   useGetTicketQuery,
@@ -8,9 +8,9 @@ import { formatDate } from "../../utils/format-date";
 import { formatCurrency } from "../../utils/format-currency";
 import { TICKET_STATUS_CONFIG } from "../../utils/status-config";
 import { Avatar } from "../../components/avatar";
-import { IconButton } from "../../components/icon-button";
 import { toast } from "sonner";
 import { CreateAdditionalServiceModal } from "./create-additional-service-modal";
+import { DeleteAdditionalServiceModal } from "./delete-additional-service-modal";
 
 export const TicketDetailsTechnician = () => {
   const { id } = useParams();
@@ -298,10 +298,8 @@ export const TicketDetailsTechnician = () => {
                         <div className="font-medium">
                           {formatCurrency(additionalService.price)}
                         </div>
-                        <IconButton
-                          icon={
-                            <Trash size={16} className="text-feedback-danger" />
-                          }
+                        <DeleteAdditionalServiceModal
+                          additionalService={additionalService}
                         />
                       </div>
                     </div>
