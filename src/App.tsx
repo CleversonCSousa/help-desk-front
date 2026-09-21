@@ -18,6 +18,7 @@ import { TicketContentResolver } from "./routes/ticket-content-resolver.tsx";
 import { TicketDetailsContentResolver } from "./routes/ticket-details-resolver.tsx";
 import { DashboardAdminServicesContent } from "./pages/dashboard/dashboard-admin-services-content.tsx";
 import { DashboardAdminCustomersContent } from "./pages/dashboard/dashboard-admin-customers-content.tsx";
+import { CustomerCreateTicket } from "./pages/dashboard/customer-create-ticket.tsx";
 
 function App() {
   return (
@@ -46,10 +47,7 @@ function App() {
                   path="create"
                   element={<RequireRole allowedRoles={["CUSTOMER"]} />}
                 >
-                  <Route
-                    index
-                    element={<h1 className="text-white">CREATE_TICKET_PAGE</h1>}
-                  />
+                  <Route index element={<CustomerCreateTicket />} />
                 </Route>
                 <Route path=":id" element={<TicketDetailsContentResolver />} />
               </Route>
