@@ -33,6 +33,7 @@ export type CustomerDTO = {
 export type ServiceDTO = {
   id: string;
   title: string;
+  description: string;
 };
 
 export type TechnicianDTO = {
@@ -70,8 +71,57 @@ export type ListTicketsParams = {
   status?: TicketStatus;
 };
 
+type CreateTicketRequest = {
+  title: string;
+  description: string;
+  serviceId: string;
+};
+
+type CreateTicketResponse = {
+  message: string;
+  ticket: TicketDetail;
+};
+
 export const ticketApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
+    createTicket: builder.mutation<CreateTicketResponse, CreateTicketRequest>({
+      query: (ticket) => ({
+        url: "/tickets",
+        method: "POST",
+        body: {
+          ...ticket,
+        },
+      }),
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+
+          dispatch(
+            ticketApiSlice.util.updateQueryData(
+              "listTickets",
+              {
+                status: "OPEN",
+              },
+              (draft) => {
+                draft.content.unshift({
+                  id: data.ticket.id,
+                  code: data.ticket.code,
+                  title: data.ticket.title,
+                  serviceName: data.ticket.service.title,
+                  totalPrice: data.ticket.totalPrice,
+                  customerName: data.ticket.customer.name,
+                  technicianName: data.ticket.technician.name,
+                  status: data.ticket.status,
+                  updatedAt: data.ticket.updatedAt,
+                });
+              },
+            ),
+          );
+        } catch (error) {
+          console.error("Failed to create ticket", error);
+        }
+      },
+    }),
     listTickets: builder.query<PaginatedResponse, ListTicketsParams>({
       query: (params) => ({
         url: `/tickets?`,
@@ -226,4 +276,5 @@ export const {
   useUpdateTicketStatusMutation,
   useCreateAdditionalServiceMutation,
   useDeleteAdditionalServiceMutation,
+  useCreateTicketMutation,
 } = ticketApiSlice;
