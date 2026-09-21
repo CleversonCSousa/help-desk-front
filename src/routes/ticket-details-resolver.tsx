@@ -4,6 +4,7 @@ import { selectCurrentUser } from "../features/auth/auth-slice";
 import { useParams } from "react-router";
 import { NotFoundDashboard } from "../pages/not-found-dashboard";
 import { TicketDetailsTechnician } from "../pages/dashboard/technician-ticket-details";
+import { TicketDetailsCustomer } from "../pages/dashboard/customer-ticket-details";
 
 export const TicketDetailsContentResolver = () => {
   const user = useSelector(selectCurrentUser);
@@ -20,7 +21,7 @@ export const TicketDetailsContentResolver = () => {
     case "TECHNICIAN":
       return <TicketDetailsTechnician />;
     case "CUSTOMER":
-      return <h1 className="text-white">/tickets/:id [CUSTOMER]</h1>;
+      return <TicketDetailsCustomer />;
     default:
       return null;
   }
